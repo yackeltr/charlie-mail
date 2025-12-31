@@ -19,10 +19,23 @@ test:
   pnpm -C sidecar/mail test
 
 dev:
+  #!/usr/bin/env zsh
   pnpm -C sidecar/mail dev &
-  @echo "Waiting for sidecar to be ready..."
-  @for i in {1..30}; do \
-    lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1 && echo "Sidecar is ready!" && break || sleep 1; \
+  SIDECAR_PID=$!
+  echo "Started sidecar (PID: $SIDECAR_PID)"
+  echo "Waiting for sidecar to be ready..."
+  for i in {1..30}; do
+    if ! kill -0 $SIDECAR_PID 2>/dev/null; then
+      echo "Error: Sidecar process died unexpectedly"
+      exit 1
+    fi
+    if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1; then
+      echo "Sidecar is ready!"
+      break
+    fi
+    sleep 1
   done
-  @lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1 || echo "Warning: Sidecar may not be ready on port 3000, but continuing..."
+  if ! lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1; then
+    echo "Warning: Sidecar may not be ready on port 3000, but continuing..."
+  fi
   pnpm -C apps/desktop tauri dev
