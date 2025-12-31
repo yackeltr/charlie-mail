@@ -20,4 +20,9 @@ test:
 
 dev:
   pnpm -C sidecar/mail dev &
+  @echo "Waiting for sidecar to be ready..."
+  @for i in {1..30}; do \
+    lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1 && echo "Sidecar is ready!" && break || sleep 1; \
+  done
+  @lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1 || echo "Warning: Sidecar may not be ready on port 3000, but continuing..."
   pnpm -C apps/desktop tauri dev
