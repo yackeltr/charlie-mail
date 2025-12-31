@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "rust-lang.rust-analyzer",
+    "vadimcn.vscode-lldb",
+    "tauri-apps.tauri-vscode",
+    "svelte.svelte-vscode",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-sqlite",
+    "github.copilot",
+    "github.copilot-chat"
+  ]
+}
