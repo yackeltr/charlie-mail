@@ -24,6 +24,8 @@ dev:
   SIDECAR_PID=$!
   echo "Started sidecar (PID: $SIDECAR_PID)"
   echo "Waiting for sidecar to be ready..."
+  # Give the process a moment to start before checking
+  sleep 0.5
   for i in {1..30}; do
     if ! kill -0 $SIDECAR_PID 2>/dev/null; then
       echo "Error: Sidecar process died unexpectedly"
